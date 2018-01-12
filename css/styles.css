@@ -39,12 +39,12 @@ body {
 }
 
 #map {
-    min-height: 60%;
+    min-height: 55%;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 500px) {
     #sidebar {
-        max-height: 40%;
+        max-height: 45%;
         overflow-y: scroll;
     }
 }

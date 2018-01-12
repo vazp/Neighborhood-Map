@@ -87,16 +87,21 @@ var Zone = function (data) {
 
     self.zoneName = data.key;
     self.zoneId = data.key.replace(/ /g, '');
+    //Holds the complete list of places for the given zone
     self.places = ko.observableArray([]);
     //Filter the locations of each zone based on the filter query
     self.filteredPlaces = ko.computed(function () {
+        //If the filter is empty return the whole array of places
         if (!viewModel.filter()) {
             return self.places();
         }
         else {
+            let filter = viewModel.filter().toLowerCase();
             return ko.utils.arrayFilter(self.places(), function (place) {
-                return place.name.toLowerCase().indexOf(
-                    viewModel.filter().toLowerCase()) > -1;
+                /*Check for the first occurrence of the filter value in the
+                  name of the place. If the value is zero or bigger it means
+                  that the filter is present in the name of the place*/
+                return place.name.toLowerCase().indexOf(filter) > -1;
             });
         }
     });
@@ -123,6 +128,7 @@ var animateMarker = function (marker) {
         }
         else {
             marker.setAnimation(google.maps.Animation.BOUNCE);
+            //Set a timeout for the animation so it does not play indefinitely
             setTimeout(function () {
                 marker.setAnimation(null);
             }, 1500);
@@ -188,6 +194,7 @@ var showFilteredMarkers = function () {
             });
         });
 
+        //Make sure that there are markers present to fit the bounds
         if (counter) {
             map.fitBounds(bounds);
         }
@@ -227,6 +234,7 @@ var ViewModel = function () {
     var self = this;
 
     self.filter = ko.observable();
+    //Holds the whole list of zones
     self.zones = ko.observableArray([]);
     self.currentPlaceImage = ko.observable();
     self.imgAlt = ko.observable();
@@ -238,18 +246,26 @@ var ViewModel = function () {
     self.wikipediaUrl = ko.observable();
     self.wButtonVisible = ko.observable(false);
 
-    // Filters whether or not a zone should be visible based on the filter query
+    /* Filters whether or not a zone should be visible based on the filter
+       query. This filters the zone as a whole, not the individual places.*/
     self.items = ko.computed(function () {
+        //If the filter is empty, return the whole array of zones
         if (!self.filter()) {
             return self.zones();
         }
         else {
+            let filter = viewModel.filter().toLowerCase();
+            /*Check whether or not a zone contains a place that meets the
+              user's filter.*/
             return ko.utils.arrayFilter(self.zones(), function (zone) {
+
+                /*Check whether or not there is any place in the given zone
+                  array of places that meets the filter*/
                 var check = ko.utils.arrayFilter(zone.places(),
                     function (place) {
-                        return place.name.toLowerCase().indexOf(
-                            self.filter().toLowerCase()) > -1;
+                        return place.name.toLowerCase().indexOf(filter) > -1;
                     });
+                //If there is any, the zone will be displayed
                 return check.length;
             });
         }
@@ -356,7 +372,10 @@ var ViewModel = function () {
         showFilteredMarkers();
     };
 
-    // Get data from firebase database
+    /* Get data from firebase database. The data doesn't really need to be
+       stored using firebase but just for the sake trying different technologies
+       it is.
+    */
     database.ref('zones').once('value').then(function (snapshot) {
         snapshot.forEach(function (child) {
             self.zones.push(new Zone(child));

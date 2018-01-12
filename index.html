@@ -13,7 +13,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
         <script src="js/lib/knockout-3.4.2.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.3/js/all.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOV-6ZrF61za4dWEvrD_K729rSDByqY0k&callback=initMap"></script>
+
         <title>Neighborhood map</title>
     </head>
 
@@ -25,7 +25,7 @@
                 </span>
             </nav>
             <div class="row h-100 content">
-                <nav id="sidebar" class="col-md-3">
+                <nav id="sidebar" class="col-sm-5 col-md-3">
                     <div class="card filter-card">
                         <form>
                             <input class="form-control" placeholder="Filter..." data-bind="value: filter, valueUpdate: 'keyup', event:{ keyup: updateMarkers }">
@@ -56,11 +56,12 @@
                         </div>
                     </div>
                 </nav>
-                <div id="map" class="col-md-9"></div>
+                <div id="map" class="col-sm-7 col-md-9"></div>
             </div>
         </div>
 
         <script src="js/app.js"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOV-6ZrF61za4dWEvrD_K729rSDByqY0k&callback=initMap"></script>
     </body>
 
 </html>
