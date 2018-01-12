@@ -105,16 +105,16 @@ var Zone = function (data) {
     data.forEach(function (child) {
         self.places.push(new Place(child));
     });
-}
+};
 
 /* Represents a location on the map */
 var Place = function (data) {
     this.name = data.key;
-    this.lat = data.val()['lat'];
-    this.lng = data.val()['lng'];
-    this.zoom = data.val()['zoom'];
+    this.lat = data.val().lat;
+    this.lng = data.val().lng;
+    this.zoom = data.val().zoom;
     this.marker = null;
-}
+};
 
 var animateMarker = function (marker) {
     if (marker !== null) {
@@ -141,7 +141,7 @@ var animateMarker = function (marker) {
             infoWindow.open(map, marker);
         }
     }
-}
+};
 
 var createMarkers = function (zones) {
     if (typeof google === 'object' && typeof google.maps === 'object') {
@@ -173,7 +173,7 @@ var createMarkers = function (zones) {
     else {
         alert('There was an error loading the map, try refreshing the page and see if the problem persist');
     }
-}
+};
 
 var showFilteredMarkers = function () {
     if (typeof google === 'object' && typeof google.maps === 'object') {
@@ -192,7 +192,7 @@ var showFilteredMarkers = function () {
             map.fitBounds(bounds);
         }
     }
-}
+};
 
 var showMarkers = function (zone) {
     if (typeof google === 'object' && typeof google.maps === 'object') {
@@ -203,7 +203,7 @@ var showMarkers = function (zone) {
         });
         map.fitBounds(bounds);
     }
-}
+};
 
 var hideAllMarkers = function () {
     if (typeof google === 'object' && typeof google.maps === 'object') {
@@ -213,7 +213,7 @@ var hideAllMarkers = function () {
             });
         });
     }
-}
+};
 
 var hideMarkers = function (zone) {
     if (typeof google === 'object' && typeof google.maps === 'object') {
@@ -221,7 +221,7 @@ var hideMarkers = function (zone) {
             place.marker.setMap(null);
         });
     }
-}
+};
 
 var ViewModel = function () {
     var self = this;
@@ -264,7 +264,7 @@ var ViewModel = function () {
             clickedZone.zoneSelected = true;
             showMarkers(clickedZone);
         }
-    }
+    };
 
     self.getResponse = function (url, successF, errorF) {
         $.ajax({
@@ -274,7 +274,7 @@ var ViewModel = function () {
             success: successF,
             error: errorF
         });
-    }
+    };
 
     self.getData = function (name, lat, lng) {
 
@@ -329,14 +329,14 @@ var ViewModel = function () {
             self.fButtonVisible(false);
             self.foursquareUrl();
         });
-    }
+    };
 
     // Scrolls to the information section
     self.focusOnInfo = function () {
         $('#sidebar').animate({
             scrollTop: $("#place-info").position().top - $("#info-column").position().top + $("#info-column").scrollTop()
         }, 1000);
-    }
+    };
 
     self.showLocation = function (clickedPlace) {
         if (typeof google === 'object' && typeof google.maps === 'object') {
@@ -349,12 +349,12 @@ var ViewModel = function () {
 
         self.focusOnInfo();
         animateMarker(clickedPlace.marker);
-    }
+    };
 
     self.updateMarkers = function () {
         hideAllMarkers();
         showFilteredMarkers();
-    }
+    };
 
     // Get data from firebase database
     database.ref('zones').once('value').then(function (snapshot) {
@@ -364,7 +364,7 @@ var ViewModel = function () {
 
         createMarkers(self.zones);
     });
-}
+};
 
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
